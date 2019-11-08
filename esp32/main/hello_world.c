@@ -127,7 +127,7 @@ void app_main(void)
 
     NabtoDevice* dev = nabto_device_new();
     nabto_device_set_log_std_out_callback(dev);
-    nabto_device_set_log_level(dev, "TRACE");
+//    nabto_device_set_log_level(dev, "trace");
     nabto_device_set_product_id(dev, "pr-zzjbojkh");
     nabto_device_set_device_id(dev, "de-34kkfogz");
     nabto_device_set_server_url(dev, "a.devices.dev.nabto.net");
@@ -145,14 +145,17 @@ void app_main(void)
         nabto_device_string_free(key);
     } else {
         // read key from nvs
-        char key[512];
+        char* key = malloc(512);
         status = nvs_get_str(handle, "private_key", key, &keyLength);
         if (status == ESP_OK) {
             nabto_device_set_private_key(dev, key);
         } else {
+            ESP_LOGI(TAG, "Cannot read private key");
+            esp_restart();
             // fail
         }
     }
+    nvs_close(handle);
 
     nabto_device_start(dev);
 
@@ -161,12 +164,38 @@ void app_main(void)
 
     printf("Started nabto device with fingerprint %s\n", fingerprint);
 
+    NabtoDeviceListener* listener = nabto_device_listener_new(dev);
+
+    const char* path[] = {"test", "get", NULL };
+
+    nabto_device_coap_init_listener(dev, listener, NABTO_DEVICE_COAP_GET, path);
+
+    NabtoDeviceFuture* future = nabto_device_future_new(dev);
+
+    while (true) {
+        NabtoDeviceCoapRequest* request;
+        nabto_device_listener_new_coap_request(listener, future, &request);
+        NabtoDeviceError ec = nabto_device_future_wait(future);
+        if (ec) {
+            esp_restart();
+        }
+
+        nabto_device_coap_response_set_code(request, 205);
+        const char* hello = "HelloWorld!";
+        nabto_device_coap_response_set_payload(request, hello, strlen(hello));
+        nabto_device_coap_response_set_content_format(request, NABTO_DEVICE_COAP_CONTENT_FORMAT_TEXT_PLAIN_UTF8);
+        nabto_device_coap_response_ready(request);
+        nabto_device_coap_request_free(request);
+    }
+
+
     printf("Waiting forever\n");
     for (int i = 0; ; i++) {
 
         vTaskDelay(1000 / portTICK_PERIOD_MS);
+        fflush(stdout);
     }
 
-    fflush(stdout);
+
     esp_restart();
 }
