@@ -15,5 +15,4 @@
 void nabto_device_init_platform(struct np_platform* pl)
 {
     np_platform_init(pl);
-    np_log_init();
 }
