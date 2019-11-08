@@ -105,6 +105,11 @@ set(communication_buffer_src
   ${root_dir}/src/modules/communication_buffer/nm_unix_communication_buffer.c
   )
 
+set(api_logging_src
+  ${root_dir}/src/modules/logging/api/nm_api_logging_stdout_unix.c
+  ${root_dir}/src/modules/logging/api/nm_api_logging.c
+  )
+
 set(adapter_src
   src/nm_select_unix.c
   src/nm_select_unix_udp.c
@@ -128,7 +133,7 @@ idf_component_register(
     "${adapter_src}"
     "${timestamp_src}"
     "${communication_buffer_src}"
-
+    "${api_logging_src}"
   INCLUDE_DIRS
     ${root_dir}/include
   PRIV_INCLUDE_DIRS

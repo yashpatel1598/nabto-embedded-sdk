@@ -34,7 +34,7 @@ void nm_api_log(uint32_t severity, uint32_t module,
                 uint32_t line, const char* file,
                 const char* fmt, va_list args)
 {
-    if (level_ & severity) {
+    if (level_ >= severity) {
         NabtoDeviceLogMessage msg;
         char log[256];
         int ret;

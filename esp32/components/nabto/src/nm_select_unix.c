@@ -46,7 +46,10 @@ int nm_select_unix_inf_wait(struct nm_select_unix* ctx)
 {
     int nfds;
     nm_select_unix_build_fd_sets(ctx);
-    nfds = select(NP_MAX(ctx->maxReadFd, ctx->maxWriteFd)+1, &ctx->readFds, &ctx->writeFds, NULL, NULL);
+    struct timeval timeout;
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    nfds = select(NP_MAX(ctx->maxReadFd, ctx->maxWriteFd)+1, &ctx->readFds, &ctx->writeFds, NULL, &timeout);
     if (nfds < 0) {
         NABTO_LOG_ERROR(LOG, "Error in select: (%i) '%s'", errno, strerror(errno));
     } else {
