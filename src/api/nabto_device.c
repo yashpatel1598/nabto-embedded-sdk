@@ -44,8 +44,8 @@ const char* NABTO_DEVICE_API nabto_device_version()
 void nabto_device_new_resolve_failure(struct nabto_device_context* dev)
 {
     dev->closing = true;
-    nabto_device_do_stop(dev);
-    nabto_device_free((NabtoDevice*)dev);
+    //nabto_device_do_stop(dev);
+    //nabto_device_free((NabtoDevice*)dev);
 }
 
 /**

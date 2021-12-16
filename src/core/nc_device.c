@@ -131,6 +131,8 @@ np_error_code nc_device_init(struct nc_device_context* device, struct np_platfor
 // nc_device_deinit must NEVER be called without successfull init
 void nc_device_deinit(struct nc_device_context* device) {
 
+    // does not work
+    return;
     struct np_platform* pl = device->pl;
 
     if (device->mdnsPublished) {
