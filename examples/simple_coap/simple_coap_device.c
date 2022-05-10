@@ -310,10 +310,26 @@ void handle_coap_post_request(NabtoDeviceCoapRequest* request)
     count++;
     if(helloWorld[k] == '1')
     {
-        printf("filp");
+        printf("filp_Camera \n");
+    }
+        if(helloWorld[k] == '2')
+    {
+        printf("LIsten \n");
+    }
+        if(helloWorld[k] == '3')
+    {
+        printf("Talk \n");
+    }
+        if(helloWorld[k] == '4')
+    {
+        printf("Pan/Tilt \n");
+    }
+        if(helloWorld[k] == '5')
+    {
+        printf("HD recording \n");
     }
     }
-    printf("%d",count);
+    printf("%d\n",count);
     printf("CoAP response changed to %s by CoAP Post request\n", payload);
     nabto_device_coap_request_free(request);
 }
