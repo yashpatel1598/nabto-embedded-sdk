@@ -302,6 +302,8 @@ void handle_coap_post_request(NabtoDeviceCoapRequest* request)
     }
     memcpy(helloWorld, payload, len);
     helloWorld[len] = '\0';
+    nabto_device_coap_response_set_code(request, 204);
+    nabto_device_coap_response_ready(request);
     int count = 0;
     for(int k = 0 ; helloWorld[k] != '\0' ; k++)
     {
@@ -312,8 +314,6 @@ void handle_coap_post_request(NabtoDeviceCoapRequest* request)
     }
     }
     printf("%d",count);
-    nabto_device_coap_response_set_code(request, 204);
-    nabto_device_coap_response_ready(request);
     printf("CoAP response changed to %s by CoAP Post request\n", payload);
     nabto_device_coap_request_free(request);
 }
